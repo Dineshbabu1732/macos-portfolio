@@ -43,9 +43,18 @@ letters.forEach((letter) => {
   const intensity = Math.exp(-(distance ** 2) / 2000);
   animateLetters(letter, min + (max - min) * intensity);
 })
-}
+};
+const handleMouseLeave = () =>  
+  letters.forEach((letter) => animateLetters(letter, base, 0.3));
 
 container.addEventListener("mousemove", handleMouseMove);
+container.addEventListener("mousemove", handleMouseLeave);
+
+return() => {
+  container.removeEventListener("mousemove", handleMouseMove);
+  container.removeEventListener("mousemove", handleMouseLeave);
+}
+
 }
 
 const Welcome = () => {
@@ -53,15 +62,20 @@ const Welcome = () => {
   const subtitleRef = useRef(null);
 
 useGSAP(()=>{
-setupTextHover(titleRef.current,"title")
-setupTextHover(subtitleRef.current,"subtitle")
+const titleCleanup = setupTextHover(titleRef.current,"title")
+const subtitleCleanup = setupTextHover(subtitleRef.current,"subtitle")
+
+return() => {
+subtitleCleanup();
+titleCleanup();
+};
 },[])
 
   return (
     <section id="welcome">
       <p ref={subtitleRef}>{renderText("Hey I'm Dinesh! Welcome to my", "text-3xl font-georama",100,) }</p>
       <h1 ref={titleRef} className="mt-7">
-       {renderText("Portfolio", "text-9xl italic font-georama")}
+       {renderText("portfolio", "text-9xl italic font-georama")}
       </h1>
       <div className="small-screen">
         <p>
